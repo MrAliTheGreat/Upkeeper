@@ -10,6 +10,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+def getMainDetails(details):
+    res = ""
+    res += details[2] + "\n"
+    res += details[3] + "\n\n"
+    res += "For PC Users: " + details[4] + "\n"
+    return res
+
 def logout(chrome: webdriver):
     print("-   Logging Out...")
     chrome.find_element(
@@ -64,9 +71,12 @@ def renewServer(chrome: webdriver):
     ).find_elements(
         By.TAG_NAME, "td"
     )
+    details = []
     for cell in portForwardingCells:
         if(cell.text):
-            print(f"    - {cell.text}")
+            details.append(cell.text)
+    
+    getMainDetails(details)
     print("-   Server Renewed!")
 
 
