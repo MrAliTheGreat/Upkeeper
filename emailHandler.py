@@ -5,13 +5,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def sendInfo():
+def sendInfo(ip, port, command):
+    print("-   Emailing New Info...")
     yag = yagmail.SMTP(os.environ.get("COMEONMAN_EMAIL"), os.environ.get("COMEONMAN_PASSWORD"))
     yag.send(
         to = os.environ.get("RECEIVER_EMAIL"),
         subject = "Server Updated - New Address",
-        contents = getEmailContent("192.168.123.112", "12345", "ssh -p 12345 root@255.255.255.255")
+        contents = getEmailContent(ip, port, command)
     )
+    print("-   Email Sent!")
 
 def getEmailContent(ip, port, command):
     return f"""
@@ -34,5 +36,3 @@ def getEmailContent(ip, port, command):
             </div>            
         </div>
     """
-
-sendInfo()

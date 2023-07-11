@@ -7,15 +7,10 @@ from time import sleep
 import os
 from dotenv import load_dotenv
 
+from emailHandler import sendInfo
+
 load_dotenv()
 
-
-def getMainDetails(details):
-    res = ""
-    res += details[2] + "\n"
-    res += details[3] + "\n\n"
-    res += "For PC Users: " + details[4] + "\n"
-    return res
 
 def logout(chrome: webdriver):
     print("-   Logging Out...")
@@ -75,9 +70,9 @@ def renewServer(chrome: webdriver):
     for cell in portForwardingCells:
         if(cell.text):
             details.append(cell.text)
-    
-    getMainDetails(details)
+
     print("-   Server Renewed!")
+    return details
 
 
 
@@ -85,11 +80,11 @@ chrome = webdriver.Chrome("./chromedriver.exe")
 chrome.maximize_window()
 chrome.implicitly_wait(5)
 chrome.get(os.environ.get("STARTING_URL"))
-print("Start Renewing!")
 login(chrome)
 sleep(10)
-renewServer(chrome)
+info = renewServer(chrome)
 sleep(10)
+sendInfo(info[2], info[3], info[4])
 logout(chrome)
 sleep(10)
 chrome.close()
